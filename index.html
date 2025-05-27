@@ -16,22 +16,60 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <link rel="stylesheet" href="leaflet/leaflet.css">
 <script src="leaflet/leaflet.js"></script>
 
+<link rel="stylesheet" href="leaflet/leaflet-panel-layers-master/src/leaflet-panel-layers.css" />
+<script src="leaflet/leaflet-panel-layers-master/src/leaflet-panel-layers.js"></script>
+
+</style>
+	.icon_legenda {
+	font-size: 18px;
+	color: #007bff;
+	}
+
+	.icon_planowane {
+	color: #666;
+	}
+</style>
+  
+</head>
+
+<body>
+  <div id="map"></div>
 
 <script>
 
-var mymap=L.map('map',{maxZoom:20}).setView([52.02,20.19],13);
+var mymap = L.map('map', {maxZoom: 20}).setView([52.0766, 21.0261], 14);
 var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'});
 osm.addTo(mymap);
 
 
-L.control.scale().addTo(mymap);
+var baseLayers = [
+{
+name: "OpenStreetMap",
+layer: osm
+}
+];
 
-var baseLayers = {
-    "OpenStreetMap": osm,
-};
-var overlays = {
-};
-L.control.layers(baseLayers, overlays).addTo(mymap);
+var overLayers = [
+{
+name: "Przystanki istniejące",
+icon: '<div class="icon_legenda"><ion-icon name="bus-outline"></ion-icon></div>',
+layer: warstwaIstniejace
+},
+{
+name: "Propozycje lokalizacji<br>przystanków planowanych",
+icon: '<div class="icon_legenda icon_planowane"><ion-icon name="hourglass-outline"></ion-icon></div>',
+layer: warstwaPlanowane
+}
+];
+
+var panelLayers = new L.Control.PanelLayers(baseLayers, overLayers, {
+compact: false,
+collapsed: false,
+collapsibleGroups: true
+});
+
+mymap.addControl(panelLayers);
+L.control.scale().addTo(mymap);
 
 mymap.attributionControl.setPrefix(
 	'<a href="http://leafletjs.com">Leaflet</a> | Józefosław 2025',
