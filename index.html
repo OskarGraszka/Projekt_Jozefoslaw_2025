@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <html>
 <head>
+
 <style>
 html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 </style> 
@@ -8,10 +9,12 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <title>Projekt Józefosław 2025</title>
 <link rel="icon" type="image/ico" href="favicon.ico"/>
 <link rel="stylesheet" href="leaflet/leaflet-compass-master/src/leaflet-compass.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.polylinemeasure/Leaflet.PolylineMeasure.css" />
 <meta charset="UTF-8">
 <link rel="stylesheet" href="leaflet/leaflet.css">
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet/leaflet-compass-master/src/leaflet-compass.js"></script>
+<script src="https://unpkg.com/leaflet.polylinemeasure/Leaflet.PolylineMeasure.js"></script>
 </head>
 
 <body>
@@ -26,7 +29,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}'
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
 });
 
-var googlesat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+var googlesat = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 20,
     subdomains: ['mt0','mt1','mt2','mt3'],
     attribution: 'Zdjęcia satelitarne &copy; Google'
@@ -34,15 +37,17 @@ var googlesat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
 
 osm.addTo(mymap);
 
-L.control.scale().addTo(mymap);
 
 //Dodanie kompasu
 var comp = new L.Control.Compass({autoActive: true, showDigit:true});
 mymap.addControl(comp);
-
+  
+// Dodanie funkcji mierzenia
+L.control.polylineMeasure({ position: 'topleft' }).addTo(mymap);
+  
 var baseLayers = {
     "OpenStreetMap": osm,
-    "Google Satellite": googlesat
+    "Google Roadmap": googlesat
 };
 
 var overlays = {};
