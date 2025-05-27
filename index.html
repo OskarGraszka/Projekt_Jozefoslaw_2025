@@ -25,6 +25,8 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <script type="module" src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.js"></script>
 
+<link rel="stylesheet" href="leaflet/leaflet-panel-layers-master/src/leaflet-panel-layers.css" />
+<script src="leaflet/leaflet-panel-layers-master/src/leaflet-panel-layers.js"></script>
 
 <style>
 		.icon_przystanki {
@@ -53,8 +55,16 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 			box-shadow: 0 0 4px rgba(0,0,0,0.3);
 			box-shadow: 0 0 4px rgba(0,0,0,0.3);
 			border: 1px solid #3d3d3b
-			
-		}
+    }
+		.icon_legenda {
+	    font-size: 18px;
+	    color: #007bff;
+	  }
+
+	  .icon_planowane{
+	    color: #666;
+	  }
+
 </style>
 
 
@@ -65,12 +75,11 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <div id="map">
 <script>
 
-var mymap = L.map('map', {maxZoom: 20}).setView([52.02, 20.19], 13);
 
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
-    foo: 'bar',
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
-});
+var mymap = L.map('map', {maxZoom: 20}).setView([52.0766, 21.0261], 14);
+var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'});
+osm.addTo(mymap);
+
 
 var googlesat = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 20,
@@ -78,9 +87,9 @@ var googlesat = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
     attribution: 'Zdjęcia satelitarne &copy; Google'
 });
 
-osm.addTo(mymap);
 
-L.control.scale().addTo(mymap);
+
+
 
 function PToL_p(feature, latlng) {
   var customIcon = L.divIcon({
@@ -132,17 +141,49 @@ var planowane_przystanki = L.geoJSON(planowane_przystanki, {
         pointToLayer: PToL
     }).addTo(mymap);
 
-var baseLayers = {
-    "OpenStreetMap": osm,
-    "Google Roadmap": googlesat
-};
+//var baseLayers = {
+//    "OpenStreetMap": osm,
+//    "Google Roadmap": googlesat
+//};
 
 
-var overlays =
-  {"Przystanki": przystanki_points,
-  "Planowane przystanki": planowane_przystanki};
+//var overlays =
+//  {"Przystanki": przystanki_points,
+//  "Planowane przystanki": planowane_przystanki};
 
-L.control.layers(baseLayers, overlays).addTo(mymap);
+//L.control.layers(baseLayers, overlays).addTo(mymap);
+ var baseLayers = [
+{
+name: "OpenStreetMap",
+layer: osm
+},
+{
+name: "Google Streets",
+layer: googlesat
+}
+];
+
+var overLayers = [
+{
+name: "Przystanki istniejące",
+icon: '<div class="icon_legenda"><ion-icon name="bus-outline"></ion-icon></div>',
+layer: warstwaIstniejace
+},
+{
+name: "Propozycje lokalizacji<br>przystanków planowanych",
+icon: '<div class="icon_legenda icon_planowane"><ion-icon name="hourglass-outline"></ion-icon></div>',
+layer: warstwaPlanowane
+}
+];
+var panelLayers = new L.Control.PanelLayers(baseLayers, overLayers, {
+compact: false,
+collapsed: false,
+collapsibleGroups: true
+});
+
+mymap.addControl(panelLayers);
+L.control.scale().addTo(mymap);
+
 
 mymap.attributionControl.setPrefix('<a href="http://leafletjs.com">Leaflet</a> | Józefosław 2025');
 
