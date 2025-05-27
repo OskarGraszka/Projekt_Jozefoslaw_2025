@@ -19,6 +19,7 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <script src="leaflet/leaflet.js"></script>
 <script src="Leaflet.ExtraMarkers-master/dist/js/leaflet.extra-markers.js"></script>
 <script src="przystanki_istniejace.js"></script>
+<script src="planowane_przystanki.js"></script>
 <script src="leaflet/leaflet-compass-master/src/leaflet-compass.js"></script>
 <script src="https://unpkg.com/leaflet.polylinemeasure/Leaflet.PolylineMeasure.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js"></script>
@@ -139,9 +140,7 @@ var baseLayers = {
 
 var overlays =
   {"Przystanki": przystanki_points,
-  "Planowane przystanki": planowane_przystanki}
-
-};
+  "Planowane przystanki": planowane_przystanki};
 
 L.control.layers(baseLayers, overlays).addTo(mymap);
 
