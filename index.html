@@ -3,9 +3,21 @@
 <head>
 <style>
 html,body,#map{width:100%;height:100%;padding:0;margin:0;}
+
+  .przycisk {
+    padding: 8px 15px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
 </style>
 
 <title>Projekt Józefosław 2025</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <link rel="icon" type="image/ico" href="favicon.ico"/>
 <meta charset="UTF-8">
 </head>
@@ -36,6 +48,10 @@ L.control.layers(baseLayers, overlays).addTo(mymap);
 mymap.attributionControl.setPrefix(
 	'<a href="http://leafletjs.com">Leaflet</a> | Józefosław 2025',
 	);
+	
+<button onclick="window.open('https://github.com/OskarGraszka/Projekt_Jozefoslaw_2025/blob/15-przycisk-do-dokumentacji/dokumentacja.md', '_blank')" class="przycisk">
+  Dokumentacja 
+</button>
 </script>
 
 
