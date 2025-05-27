@@ -8,15 +8,39 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 <title>Projekt Józefosław 2025</title>
 <link rel="icon" type="image/ico" href="favicon.ico"/>
 <meta charset="UTF-8">
+<link rel="icon" type="image/ico" href="favicon.ico"/>
+<link rel="stylesheet" href="Leaflet.ExtraMarkers-master/Leaflet.ExtraMarkers-master/src/assets/css/leaflet.extra-markers.css">
+
+
+<link rel="stylesheet" href="leaflet/leaflet.css">
+<script src="leaflet/leaflet.js"></script>
+<script src="planowane_przystanki.js"></script>
+<script src="Leaflet.ExtraMarkers-master/Leaflet.ExtraMarkers-master/dist/js/leaflet.extra-markers.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.js"></script>
+
+<style>
+		.my-custom-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #d3d3d3;
+			border-radius: 50%;
+			width: 30px;
+			height: 30px;
+			color: #3d3d3b;
+			font-size: 16px;
+			box-shadow: 0 0 4px rgba(0,0,0,0.3);
+			box-shadow: 0 0 4px rgba(0,0,0,0.3);
+			border: 1px solid #3d3d3b
+			
+		}
+</style>
+
 </head>
 
 <body>
 <div id="map">
-
-<link rel="stylesheet" href="leaflet/leaflet.css">
-<script src="leaflet/leaflet.js"></script>
-
-
 <script>
 
 var mymap=L.map('map',{maxZoom:20}).setView([52.02,20.19],13);
@@ -24,11 +48,35 @@ var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', 
 osm.addTo(mymap);
 
 
+
 L.control.scale().addTo(mymap);
+
+// DODANIE WARSTWY WEKTOROWEJ - GEOJSON PRZYSTANKI PLANOWANE
+function PToL(feature, latlng) {
+  var customIcon = L.divIcon({
+    html: '<ion-icon name="hourglass-outline" style="font-size: 24px;"></ion-icon>',
+    className: 'my-custom-icon',
+    iconSize: [30, 30]
+  });
+	return L.marker(latlng, { icon: customIcon });
+}
+ 
+ 
+function oEF(feature, layer) {
+        if (feature.properties && feature.properties.title) {
+            layer.bindTooltip(feature.properties.title, { permanent: false });
+        }
+    }
+var planowane_przystanki = L.geoJSON(planowane_przystanki, {
+        onEachFeature: oEF,
+        pointToLayer: PToL
+    }).addTo(mymap);
 
 var baseLayers = {
     "OpenStreetMap": osm,
 };
+
+
 var overlays = {
 };
 L.control.layers(baseLayers, overlays).addTo(mymap);
@@ -36,6 +84,9 @@ L.control.layers(baseLayers, overlays).addTo(mymap);
 mymap.attributionControl.setPrefix(
 	'<a href="http://leafletjs.com">Leaflet</a> | Józefosław 2025',
 	);
+	
+	
+
 </script>
 
 
