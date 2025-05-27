@@ -7,15 +7,37 @@ html,body,#map{width:100%;height:100%;padding:0;margin:0;}
 
 <title>Projekt Józefosław 2025</title>
 <link rel="icon" type="image/ico" href="favicon.ico"/>
+<link rel="stylesheet" href="Leaflet.ExtraMarkers-master/src/assets/css/leaflet.extra-markers.css">
 <meta charset="UTF-8">
+
+<link rel="stylesheet" href="leaflet/leaflet.css">
+<script src="leaflet/leaflet.js"></script>
+<script src="Leaflet.ExtraMarkers-master/dist/js/leaflet.extra-markers.js"></script>
+<script src="przystanki_istniejace.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.2.1/dist/ionicons/ionicons.js"></script>
+
+
+<style>
+		.icon_przystanki {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #007bff;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			color: white;
+			font-size: 12px;
+			box-shadow: 0 0 4px rgba(0,0,0,0.3);
+			border: 1px solid white;
+		}
+</style>
+
 </head>
 
 <body>
 <div id="map">
-
-<link rel="stylesheet" href="leaflet/leaflet.css">
-<script src="leaflet/leaflet.js"></script>
-
 
 <script>
 
@@ -26,10 +48,31 @@ osm.addTo(mymap);
 
 L.control.scale().addTo(mymap);
 
+function PToL_p(feature, latlng) {
+  var customIcon = L.divIcon({
+    html: '<ion-icon name="bus-outline" style="font-size: 24px;"></ion-icon>',
+    className: 'icon_przystanki',
+    iconSize: [30, 30]
+  });
+	return L.marker(latlng, { icon: customIcon });
+}
+
+
+function oEF_p(feature, layer) {
+        if (feature.properties && feature.properties.title) {
+            layer.bindTooltip(feature.properties.title, { permanent: false });
+        }
+    }
+var przystanki_points = L.geoJSON(przystanki_istniejace, {
+        onEachFeature: oEF_p,
+        pointToLayer: PToL_p
+    }).addTo(mymap);
+	
+	
 var baseLayers = {
     "OpenStreetMap": osm,
 };
-var overlays = {
+var overlays = {"Przystanki": przystanki_points
 };
 L.control.layers(baseLayers, overlays).addTo(mymap);
 
